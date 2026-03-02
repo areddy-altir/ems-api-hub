@@ -1,4 +1,4 @@
-package co.altir.example;
+package co.altir.ems;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

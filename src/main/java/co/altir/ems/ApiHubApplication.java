@@ -1,4 +1,4 @@
-package co.altir.example;
+package co.altir.ems;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.OpenAPIConfig;
 import co.altir.dbmanagement.dataaccess.openapidsl.OpenAPIConfig.DtoGeneratorConfig.ModelSplitDepth;

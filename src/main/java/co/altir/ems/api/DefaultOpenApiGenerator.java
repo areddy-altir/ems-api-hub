@@ -1,4 +1,4 @@
-package co.altir.example.api;
+package co.altir.ems.api;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.OpenAPIConfig;
 import co.altir.dbmanagement.dataaccess.openapidsl.OpenAPIGenerator;
@@ -44,8 +44,8 @@ public abstract class DefaultOpenApiGenerator extends OpenAPIGenerator {
         serviceMetadata.maintainerEmail,
         serviceMetadata.version);
     bearerSecuritySchema();
-    scanAllControllersInPackage("co.altir.example.controller." + serviceMetadata.name);
-    scanAllModelsInPackage("co.altir.example.model." + serviceMetadata.name);
+    scanAllControllersInPackage("co.altir.ems.controller." + serviceMetadata.name);
+    scanAllModelsInPackage("co.altir.ems.model." + serviceMetadata.name);
   }
 
   public record ServiceMetadata(

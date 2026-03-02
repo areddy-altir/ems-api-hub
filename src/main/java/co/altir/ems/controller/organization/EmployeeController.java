@@ -1,10 +1,10 @@
-package co.altir.example.controller.organization;
+package co.altir.ems.controller.organization;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.HttpMethod;
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslCrudEndpoints;
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslEndpoint;
-import co.altir.example.model.organization.Employee;
-import co.altir.example.model.organization.Manager;
+import co.altir.ems.model.organization.Employee;
+import co.altir.ems.model.organization.Manager;
 import java.util.List;
 import java.util.UUID;
 

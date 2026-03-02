@@ -1,4 +1,4 @@
-package co.altir.example.api;
+package co.altir.ems.api;
 
 public class OrganizationApiGenerator extends DefaultOpenApiGenerator {
   public OrganizationApiGenerator() {

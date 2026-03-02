@@ -1,4 +1,4 @@
-package co.altir.example;
+package co.altir.ems;
 
 import java.util.List;
 import lombok.Data;

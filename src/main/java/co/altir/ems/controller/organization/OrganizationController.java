@@ -1,14 +1,14 @@
-package co.altir.example.controller.organization;
+package co.altir.ems.controller.organization;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.HttpMethod;
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslCrudEndpoints;
-import co.altir.example.model.organization.Manager;
+import co.altir.ems.model.organization.Organization;
 
-// Source cell: Organization (organization)::A34
-public interface ManagerController {
+// Source cell: Organization (organization)::A2
+public interface OrganizationController {
 
   @DslCrudEndpoints(
-      path = "/manager",
+      path = "/organization",
       methods = {
         HttpMethod.GET,
         HttpMethod.GET_BY_ID,
@@ -16,5 +16,5 @@ public interface ManagerController {
         HttpMethod.PATCH,
         HttpMethod.DELETE
       })
-  Manager crudEndpointsForManager();
+  Organization crudEndpointsForOrganization();
 }

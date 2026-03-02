@@ -1,4 +1,4 @@
-package co.altir.example;
+package co.altir.ems;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslHasMore;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslTotalHits;

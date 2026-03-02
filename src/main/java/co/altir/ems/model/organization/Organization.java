@@ -1,11 +1,11 @@
-package co.altir.example.model.organization;
+package co.altir.ems.model.organization;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslFragmentProjection;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslJpaEntity;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslOneToMany;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslRequired;
-import co.altir.example.model.common.Address;
-import co.altir.example.model.common.BaseAuditFields;
+import co.altir.ems.model.common.Address;
+import co.altir.ems.model.common.BaseAuditFields;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;

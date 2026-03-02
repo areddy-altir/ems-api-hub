@@ -9,7 +9,7 @@
         <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>co.altir.example</groupId>
+    <groupId>co.altir.ems</groupId>
     <artifactId>ems-api-hub</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>api-hub-example</name>
@@ -110,7 +110,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>co.altir.example.ApiHubApplication</mainClass>
+                                    <mainClass>co.altir.ems.ApiHubApplication</mainClass>
                                     <arguments>
                                         <argument>${project.basedir}</argument>
                                     </arguments>

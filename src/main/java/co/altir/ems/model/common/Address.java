@@ -1,4 +1,4 @@
-package co.altir.example.model.common;
+package co.altir.ems.model.common;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslJpaEmbeddable;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslRequired;
