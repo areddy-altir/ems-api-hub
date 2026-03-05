@@ -4,6 +4,7 @@ import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslFragmen
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslJpaEntity;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslOneToMany;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslRequired;
+import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslScope;
 import co.altir.ems.model.common.Address;
 import co.altir.ems.model.common.BaseAuditFields;
 import java.util.List;
@@ -23,10 +24,11 @@ public class Organization extends BaseAuditFields {
   @DslRequired()
   private String name;
 
-  @DslFragmentProjection({"SUMMARY", "FULL"})
+  @DslFragmentProjection("FULL")
   @DslRequired()
   private Address address;
 
+  @DslScope()
   @DslFragmentProjection("FULL")
   @DslOneToMany(mappedBy = "organization")
   private List<Employee> employees;

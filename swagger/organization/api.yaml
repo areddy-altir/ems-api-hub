@@ -13,14 +13,14 @@ security:
 - BearerAuth: []
 tags:
 - name: Employee
-- name: Manager
+- name: EmployeeRelation
 - name: Organization
 paths:
-  /employee:
+  /employees:
     get:
       tags:
       - Employee
-      operationId: findEmployee
+      operationId: findEmployees
       parameters:
       - name: page
         in: query
@@ -104,7 +104,7 @@ paths:
     post:
       tags:
       - Employee
-      operationId: createEmployee
+      operationId: createEmployees
       requestBody:
         description: Employee request
         content:
@@ -152,11 +152,11 @@ paths:
       x-fn-crud-operation:
         op: POST
         type: Employee
-  /employee/{id}:
+  /employees/{id}:
     get:
       tags:
       - Employee
-      operationId: findByIdEmployee
+      operationId: findByIdEmployees
       parameters:
       - name: id
         in: path
@@ -208,7 +208,7 @@ paths:
     delete:
       tags:
       - Employee
-      operationId: deleteEmployee
+      operationId: deleteEmployees
       parameters:
       - name: id
         in: path
@@ -260,7 +260,7 @@ paths:
     patch:
       tags:
       - Employee
-      operationId: patchEmployee
+      operationId: patchEmployees
       parameters:
       - name: id
         in: path
@@ -320,7 +320,8 @@ paths:
     get:
       tags:
       - Employee
-      operationId: getEmployeeHierarchy
+      description: Get full downward hierarchy
+      operationId: getHierarchy
       parameters:
       - name: employeeId
         in: path
@@ -330,11 +331,11 @@ paths:
           format: uuid
       responses:
         "200":
-          description: Successfully retrieved objects
+          description: Successfully retrieved employee hierarchy nodes
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ObjectReadByIdResponse"
+                $ref: "#/components/schemas/EmployeeHierarchyNodeResponse"
         "400":
           description: Bad request
           content:
@@ -365,108 +366,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /employees/{employeeId}/manager:
+  /employees/{employeeId}/subordinates:
     get:
       tags:
       - Employee
-      operationId: getEmployeeManager
-      parameters:
-      - name: employeeId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: Successfully retrieved managers
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ManagerResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    put:
-      tags:
-      - Employee
-      operationId: updateEmployeeManager
-      parameters:
-      - name: employeeId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: Successfully updated manager
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ManagerResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /employees/{employeeId}/reportees:
-    get:
-      tags:
-      - Employee
-      operationId: getEmployeeReportees
+      description: Returns employees directly reporting to this employee
+      operationId: getSubordinates
       parameters:
       - name: employeeId
         in: path
@@ -511,57 +416,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /manager:
+  /employees/{employeeId}/supervisor:
     get:
       tags:
-      - Manager
-      operationId: findManager
+      - Employee
+      description: Returns direct supervisor of this employee
+      operationId: getSupervisor
       parameters:
-      - name: page
-        in: query
-        description: Zero-based page index (0..N)
-        required: false
-        style: simple
-        schema:
-          minimum: 0
-          type: integer
-          format: int32
-          default: 0
-      - name: size
-        in: query
-        description: The size of the page to be returned
-        required: false
-        style: simple
-        schema:
-          minimum: 1
-          type: integer
-          format: int32
-          default: 20
-      - name: sort
-        in: query
-        description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-        required: false
-        style: simple
-        schema:
-          type: array
-          items:
-            type: string
-      - name: filter
-        in: query
-        description: Query filter
-        required: false
-        style: simple
+      - name: employeeId
+        in: path
+        required: true
         schema:
           type: string
-          format: filter
+          format: uuid
       responses:
         "200":
-          description: Successfully retrieved managers
+          description: Successfully retrieved employees
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ManagerArrayResponse"
+                $ref: "#/components/schemas/EmployeeResponse"
         "400":
           description: Bad request
           content:
@@ -592,28 +466,75 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-fn-crud-operation:
-        op: GET
-        type: Manager
-      x-spring-paginated: true
-    post:
+  /employees/{employeeId}/role:
+    patch:
       tags:
-      - Manager
-      operationId: createManager
-      requestBody:
-        description: Manager request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Manager"
+      - Employee
+      description: Assign or change role of an employee
+      operationId: updateEmployeeRole
+      parameters:
+      - name: employeeId
+        in: path
         required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
-          description: Successfully created manager
+          description: Successfully updated employee
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ManagerResponse"
+                $ref: "#/components/schemas/EmployeeResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server side error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /employee-relations:
+    post:
+      tags:
+      - EmployeeRelation
+      operationId: createEmployeeRelations
+      requestBody:
+        description: EmployeeRelation request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeRelation"
+        required: true
+      responses:
+        "200":
+          description: Successfully created employee relation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeRelationResponse"
         "400":
           description: Bad request
           content:
@@ -646,64 +567,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       x-fn-crud-operation:
         op: POST
-        type: Manager
-  /manager/{id}:
-    get:
-      tags:
-      - Manager
-      operationId: findByIdManager
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: Successfully retrieved manager
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ManagerResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-fn-crud-operation:
-        op: GET_BY_ID
-        type: Manager
+        type: EmployeeRelation
+  /employee-relations/{id}:
     delete:
       tags:
-      - Manager
-      operationId: deleteManager
+      - EmployeeRelation
+      operationId: deleteEmployeeRelations
       parameters:
       - name: id
         in: path
@@ -751,66 +620,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       x-fn-crud-operation:
         op: DELETE
-        type: Manager
-    patch:
-      tags:
-      - Manager
-      operationId: patchManager
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        schema:
-          type: string
-          format: uuid
-      requestBody:
-        description: Manager request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Manager"
-        required: true
-      responses:
-        "200":
-          description: Successfully updated manager
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ManagerResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-fn-crud-operation:
-        op: PATCH
-        type: Manager
+        type: EmployeeRelation
   /organization:
     get:
       tags:
@@ -1147,6 +957,30 @@ components:
         message:
           type: string
       x-fn-base-dto-type: NO_OP
+    EmployeeRole:
+      type: string
+      enum:
+      - EMPLOYEE
+      - MANAGER
+      - SENIOR_MANAGER
+      - ADMIN
+      - HR
+    EmployeeHierarchyNode:
+      required:
+      - employee
+      type: object
+      properties:
+        employee:
+          description: employee details
+          allOf:
+          - $ref: "#/components/schemas/Employee"
+          x-fn-fragment-projection:
+          - SUMMARY
+        children:
+          type: array
+          description: employees reporting to this employee
+          items:
+            $ref: "#/components/schemas/EmployeeHierarchyNode"
     Organization:
       required:
       - address
@@ -1172,7 +1006,6 @@ components:
           x-fn-jpa-property:
             embedded: true
           x-fn-fragment-projection:
-          - SUMMARY
           - FULL
         employees:
           type: array
@@ -1214,31 +1047,36 @@ components:
             custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
         firstname:
           type: string
+          x-fn-fragment-projection:
+          - SUMMARY
+          - FULL
         lastname:
           type: string
+          x-fn-fragment-projection:
+          - SUMMARY
+          - FULL
         email:
           type: string
+          x-fn-fragment-projection:
+          - SUMMARY
+          - FULL
           x-fn-jpa-property:
             custom-annotations: '@jakarta.persistence.Column(unique = true)'
         phone:
           type: string
+          x-fn-fragment-projection:
+          - FULL
         address:
           allOf:
           - $ref: "#/components/schemas/Address"
           x-fn-jpa-property:
             embedded: true
+          x-fn-fragment-projection:
+          - FULL
       allOf:
       - $ref: "#/components/schemas/BaseAuditFields"
       x-fn-jpa-entity:
         name: users
-    ManagerResponse:
-      allOf:
-      - $ref: "#/components/schemas/ApiResponseBase"
-      - type: object
-        properties:
-          data:
-            $ref: "#/components/schemas/Manager"
-      x-fn-wrapper-field: data
     Address:
       required:
       - city
@@ -1293,84 +1131,6 @@ components:
       discriminator:
         propertyName: type
       x-fn-response-wrapper: data
-    Manager:
-      required:
-      - organization
-      - user
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          x-fn-id: true
-          x-fn-jpa-property:
-            id-generator:
-              strategy: UUID
-            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
-        organization:
-          allOf:
-          - $ref: "#/components/schemas/Organization"
-          x-fn-jpa-property:
-            ref:
-              many-to-one:
-                fetch: lazy
-                cascade:
-                - PERSIST
-                - REFRESH
-                orphan-removal: false
-              join-column:
-                nullable: false
-          x-fn-fragment-projection:
-          - SUMMARY
-          - FULL
-        user:
-          allOf:
-          - $ref: "#/components/schemas/User"
-          x-fn-jpa-property:
-            ref:
-              one-to-one:
-                fetch: lazy
-                cascade:
-                - PERSIST
-                - REFRESH
-                orphan-removal: false
-              join-column:
-                nullable: false
-          x-fn-fragment-projection:
-          - SUMMARY
-          - FULL
-        employee:
-          type: array
-          items:
-            $ref: "#/components/schemas/Employee"
-          x-fn-jpa-property:
-            ref:
-              one-to-many:
-                fetch: lazy
-                mapped-by: manager
-                cascade:
-                - PERSIST
-                - REFRESH
-                orphan-removal: true
-              join-column:
-                nullable: false
-          x-fn-fragment-projection:
-          - FULL
-      allOf:
-      - $ref: "#/components/schemas/BaseAuditFields"
-      x-fn-jpa-entity:
-        name: managers
-    ManagerArrayResponse:
-      allOf:
-      - $ref: "#/components/schemas/ArrayResponseBase"
-      - type: object
-        properties:
-          data:
-            uniqueItems: false
-            type: array
-            items:
-              $ref: "#/components/schemas/Manager"
-      x-fn-wrapper-field: data
     ErrorResponse:
       type: object
       properties:
@@ -1384,6 +1144,14 @@ components:
             $ref: "#/components/schemas/ErrorField"
       description: Common error response object
       x-fn-base-dto-type: NO_OP
+    EmployeeHierarchyNodeResponse:
+      allOf:
+      - $ref: "#/components/schemas/ApiResponseBase"
+      - type: object
+        properties:
+          data:
+            $ref: "#/components/schemas/EmployeeHierarchyNode"
+      x-fn-wrapper-field: data
     BooleanReadByIdResponse:
       allOf:
       - $ref: "#/components/schemas/ApiResponseBase"
@@ -1434,21 +1202,14 @@ components:
                 orphan-removal: false
               join-column:
                 nullable: false
-        manager:
-          allOf:
-          - $ref: "#/components/schemas/Manager"
-          x-fn-jpa-property:
-            ref:
-              many-to-one:
-                fetch: lazy
-                cascade:
-                - PERSIST
-                - REFRESH
-                orphan-removal: false
-              join-column:
-                nullable: false
           x-fn-fragment-projection:
           - SUMMARY
+        role:
+          allOf:
+          - $ref: "#/components/schemas/EmployeeRole"
+          x-fn-fragment-projection:
+          - SUMMARY
+          - FULL
       allOf:
       - $ref: "#/components/schemas/BaseAuditFields"
       x-fn-jpa-entity:
@@ -1472,6 +1233,50 @@ components:
           data:
             $ref: "#/components/schemas/Organization"
       x-fn-wrapper-field: data
+    EmployeeRelation:
+      required:
+      - subordinate
+      - supervisor
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          x-fn-id: true
+          x-fn-jpa-property:
+            id-generator:
+              strategy: UUID
+            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
+        supervisor:
+          allOf:
+          - $ref: "#/components/schemas/Employee"
+          x-fn-jpa-property:
+            ref:
+              many-to-one:
+                fetch: lazy
+                cascade:
+                - PERSIST
+                - REFRESH
+                orphan-removal: false
+              join-column:
+                nullable: false
+        subordinate:
+          allOf:
+          - $ref: "#/components/schemas/Employee"
+          x-fn-jpa-property:
+            ref:
+              many-to-one:
+                fetch: lazy
+                cascade:
+                - PERSIST
+                - REFRESH
+                orphan-removal: false
+              join-column:
+                nullable: false
+      allOf:
+      - $ref: "#/components/schemas/BaseAuditFields"
+      x-fn-jpa-entity:
+        name: employee_relations
     OrganizationArrayResponse:
       allOf:
       - $ref: "#/components/schemas/ArrayResponseBase"
@@ -1491,13 +1296,13 @@ components:
           data:
             $ref: "#/components/schemas/Employee"
       x-fn-wrapper-field: data
-    ObjectReadByIdResponse:
+    EmployeeRelationResponse:
       allOf:
       - $ref: "#/components/schemas/ApiResponseBase"
       - type: object
         properties:
           data:
-            type: object
+            $ref: "#/components/schemas/EmployeeRelation"
       x-fn-wrapper-field: data
   securitySchemes:
     BearerAuth:

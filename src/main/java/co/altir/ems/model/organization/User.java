@@ -1,5 +1,6 @@
 package co.altir.ems.model.organization;
 
+import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslFragmentProjection;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslJpaEntity;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslRequired;
 import co.altir.ems.model.common.Address;
@@ -17,15 +18,24 @@ public class User extends BaseAuditFields {
 
   private UUID id;
 
-  @DslRequired() private String firstname;
+  @DslFragmentProjection({"SUMMARY", "FULL"})
+  @DslRequired()
+  private String firstname;
 
-  @DslRequired() private String lastname;
+  @DslFragmentProjection({"SUMMARY", "FULL"})
+  @DslRequired()
+  private String lastname;
 
+  @DslFragmentProjection({"SUMMARY", "FULL"})
   @Column(unique = true)
   @DslRequired()
   private String email;
 
-  @DslRequired() private String phone;
+  @DslFragmentProjection("FULL")
+  @DslRequired()
+  private String phone;
 
-  @DslRequired() private Address address;
+  @DslFragmentProjection("FULL")
+  @DslRequired()
+  private Address address;
 }

@@ -12,8 +12,8 @@
     <groupId>co.altir.ems</groupId>
     <artifactId>ems-api-hub</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>api-hub-example</name>
-    <description>api-hub-example</description>
+    <name>ems-api-hub</name>
+    <description>ems-api-hub</description>
     <properties>
         <java.version>17</java.version>
         <fn-openapi-dsl.version>2.5.46</fn-openapi-dsl.version>

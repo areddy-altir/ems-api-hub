@@ -23,9 +23,11 @@ public class Employee extends BaseAuditFields {
   @DslRequired()
   private Organization organization;
 
-  @DslOneToOne @DslRequired() private User user;
-
-  @DslManyToOne
+  @DslOneToOne
   @DslFragmentProjection("SUMMARY")
-  private Manager manager;
+  @DslRequired()
+  private User user;
+
+  @DslFragmentProjection({"SUMMARY", "FULL"})
+  private EmployeeRole role;
 }
