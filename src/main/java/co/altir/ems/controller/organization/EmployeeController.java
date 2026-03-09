@@ -1,4 +1,4 @@
-package co.altir.ems.controller.organization;
+gipackage co.altir.ems.controller.organization;
 
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.HttpMethod;
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslCrudEndpoints;
@@ -40,7 +40,4 @@ public interface EmployeeController {
 
   @DslEndpoint(path = "/employees/search", method = HttpMethod.GET)
   List<Employee> searchEmployees();
-
-  @DslEndpoint(path = "/employees/search/suggest", method = HttpMethod.GET)
-  List<Employee> suggestEmployees();
 }

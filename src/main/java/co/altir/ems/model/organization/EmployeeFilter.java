@@ -5,14 +5,12 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-// Source cell: Organization (organization)::A60
+// Source cell: Organization (organization)::A50
 @Accessors(chain = true)
 @Data
 public class EmployeeFilter {
 
   private String globalSearch;
-
-  private List<String> role;
 
   private List<UUID> organization;
 

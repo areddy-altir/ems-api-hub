@@ -35,6 +35,9 @@ public class Employee extends Searchable {
   private User user;
 
   @DslFragmentProjection({"SUMMARY", "FULL"})
-  @DslScope({Scope.DTO, Scope.JPA, Scope.ES})
+  @DslScope({Scope.DTO, Scope.JPA})
   private EmployeeRole role;
+
+  @DslScope({Scope.DTO, Scope.ES})
+  private String globalSearch;
 }

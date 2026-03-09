@@ -508,48 +508,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /employees/search/suggest:
-    get:
-      tags:
-      - Employee
-      operationId: suggestEmployees
-      responses:
-        "200":
-          description: Successfully retrieved employees
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EmployeeArrayResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
   /employees/{employeeId}/role:
     patch:
       tags:
@@ -1185,19 +1143,6 @@ components:
         refresh: false
         refreshInterval: 5s
         type: users
-    EmployeeSuggest:
-      type: object
-      properties:
-        query:
-          type: string
-        organization:
-          type: string
-          format: uuid
-          x-fn-jpa-property:
-            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
-        role:
-          type: string
-      x-fn-base-dto-type: NO_OP
     Address:
       required:
       - city
@@ -1247,10 +1192,6 @@ components:
       properties:
         globalSearch:
           type: string
-        role:
-          type: array
-          items:
-            type: string
         organization:
           type: array
           items:
@@ -1358,7 +1299,6 @@ components:
           x-fn-scope:
           - DTO
           - JPA
-          - ES
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
@@ -1478,72 +1418,6 @@ components:
           data:
             $ref: "#/components/schemas/EmployeeRelation"
       x-fn-wrapper-field: data
-    EmployeeSearchDocument:
-      required:
-      - active
-      - email
-      - employeeId
-      - firstName
-      - lastName
-      - organizationId
-      - role
-      type: object
-      properties:
-        employeeId:
-          type: string
-          format: uuid
-          x-fn-scope:
-          - DTO
-          - ES
-          x-fn-jpa-property:
-            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
-        organizationId:
-          type: string
-          format: uuid
-          x-fn-scope:
-          - DTO
-          - ES
-          x-fn-jpa-property:
-            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
-        role:
-          type: string
-          x-fn-scope:
-          - DTO
-          - ES
-        firstName:
-          type: string
-          x-fn-scope:
-          - DTO
-          - ES
-        lastName:
-          type: string
-          x-fn-scope:
-          - DTO
-          - ES
-        email:
-          type: string
-          x-fn-scope:
-          - DTO
-          - ES
-        phone:
-          type: string
-          x-fn-scope:
-          - DTO
-          - ES
-        active:
-          type: boolean
-          x-fn-scope:
-          - DTO
-          - ES
-      x-fn-base-dto-type: NO_OP
-      x-fn-es-document:
-        migrationType: REINDEX
-        numberOfReplicas: 1
-        numberOfShards: 1
-        override: false
-        refresh: false
-        refreshInterval: 5s
-        type: employee_search_documents
   securitySchemes:
     BearerAuth:
       type: http
