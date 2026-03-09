@@ -37,4 +37,10 @@ public interface EmployeeController {
   /** Returns direct supervisor of this employee */
   @DslEndpoint(path = "/employees/{employeeId}/supervisor", method = HttpMethod.GET)
   Employee getSupervisor(UUID employeeId);
+
+  @DslEndpoint(path = "/employees/search", method = HttpMethod.GET)
+  List<Employee> searchEmployees();
+
+  @DslEndpoint(path = "/employees/search/suggest", method = HttpMethod.GET)
+  List<Employee> suggestEmployees();
 }

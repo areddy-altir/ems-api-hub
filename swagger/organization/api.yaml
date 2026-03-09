@@ -466,6 +466,90 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /employees/search:
+    get:
+      tags:
+      - Employee
+      operationId: searchEmployees
+      responses:
+        "200":
+          description: Successfully retrieved employees
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeArrayResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server side error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /employees/search/suggest:
+    get:
+      tags:
+      - Employee
+      operationId: suggestEmployees
+      responses:
+        "200":
+          description: Successfully retrieved employees
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeArrayResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server side error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /employees/{employeeId}/role:
     patch:
       tags:
@@ -1047,16 +1131,28 @@ components:
             custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
         firstname:
           type: string
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
         lastname:
           type: string
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
         email:
           type: string
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
@@ -1064,6 +1160,10 @@ components:
             custom-annotations: '@jakarta.persistence.Column(unique = true)'
         phone:
           type: string
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - FULL
         address:
@@ -1077,6 +1177,14 @@ components:
       - $ref: "#/components/schemas/BaseAuditFields"
       x-fn-jpa-entity:
         name: users
+      x-fn-es-document:
+        migrationType: REINDEX
+        numberOfReplicas: 1
+        numberOfShards: 1
+        override: false
+        refresh: false
+        refreshInterval: 5s
+        type: users
     Address:
       required:
       - city
@@ -1121,6 +1229,21 @@ components:
         propertyName: type
       x-fn-base-dto-type: NO_OP
       x-fn-response-wrapper: data
+    EmployeeFilter:
+      type: object
+      properties:
+        globalSearch:
+          type: string
+        organization:
+          type: array
+          items:
+            type: string
+            format: uuid
+          x-fn-jpa-property:
+            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
+        active:
+          type: boolean
+      x-fn-base-dto-type: NO_OP
     ApiResponseBase:
       required:
       - message
@@ -1187,6 +1310,10 @@ components:
                 orphan-removal: false
               join-column:
                 nullable: false
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
         user:
@@ -1202,18 +1329,33 @@ components:
                 orphan-removal: false
               join-column:
                 nullable: false
+          x-fn-scope:
+          - DTO
+          - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
         role:
           allOf:
           - $ref: "#/components/schemas/EmployeeRole"
+          x-fn-scope:
+          - DTO
+          - JPA
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
       allOf:
-      - $ref: "#/components/schemas/BaseAuditFields"
+      - $ref: "#/components/schemas/Searchable"
       x-fn-jpa-entity:
         name: employees
+      x-fn-es-document:
+        migrationType: REINDEX
+        numberOfReplicas: 1
+        numberOfShards: 1
+        override: false
+        refresh: false
+        refreshInterval: 5s
+        type: employees
     EmployeeArrayResponse:
       allOf:
       - $ref: "#/components/schemas/ArrayResponseBase"
@@ -1296,6 +1438,20 @@ components:
           data:
             $ref: "#/components/schemas/Employee"
       x-fn-wrapper-field: data
+    Searchable:
+      type: object
+      properties:
+        globalSearch:
+          type: string
+          x-fn-scope:
+          - DTO
+          - ES
+      discriminator:
+        propertyName: type
+      allOf:
+      - $ref: "#/components/schemas/BaseAuditFields"
+      x-fn-jpa-entity:
+        custom-annotations: '@MappedSuperclass'
     EmployeeRelationResponse:
       allOf:
       - $ref: "#/components/schemas/ApiResponseBase"
