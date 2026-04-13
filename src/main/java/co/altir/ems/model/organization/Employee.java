@@ -9,7 +9,6 @@ import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslRequire
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.DslScope;
 import co.altir.dbmanagement.dataaccess.openapidsl.schema.annotations.Scope;
 import co.altir.ems.model.common.Searchable;
-import java.util.UUID;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,8 +18,6 @@ import lombok.experimental.Accessors;
 @DslJpaEntity("employees")
 @DslEsDocument("employees")
 public class Employee extends Searchable {
-
-  private UUID id;
 
   @DslManyToOne
   @DslFragmentProjection("SUMMARY")
@@ -35,9 +32,6 @@ public class Employee extends Searchable {
   private User user;
 
   @DslFragmentProjection({"SUMMARY", "FULL"})
-  @DslScope({Scope.DTO, Scope.JPA})
+  @DslScope({Scope.DTO, Scope.JPA, Scope.ES})
   private EmployeeRole role;
-
-  @DslScope({Scope.DTO, Scope.ES})
-  private String globalSearch;
 }

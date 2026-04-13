@@ -16,142 +16,6 @@ tags:
 - name: EmployeeRelation
 - name: Organization
 paths:
-  /employees:
-    get:
-      tags:
-      - Employee
-      operationId: findEmployees
-      parameters:
-      - name: page
-        in: query
-        description: Zero-based page index (0..N)
-        required: false
-        style: simple
-        schema:
-          minimum: 0
-          type: integer
-          format: int32
-          default: 0
-      - name: size
-        in: query
-        description: The size of the page to be returned
-        required: false
-        style: simple
-        schema:
-          minimum: 1
-          type: integer
-          format: int32
-          default: 20
-      - name: sort
-        in: query
-        description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-        required: false
-        style: simple
-        schema:
-          type: array
-          items:
-            type: string
-      - name: filter
-        in: query
-        description: Query filter
-        required: false
-        style: simple
-        schema:
-          type: string
-          format: filter
-      responses:
-        "200":
-          description: Successfully retrieved employees
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EmployeeArrayResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-fn-crud-operation:
-        op: GET
-        type: Employee
-      x-spring-paginated: true
-    post:
-      tags:
-      - Employee
-      operationId: createEmployees
-      requestBody:
-        description: Employee request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Employee"
-        required: true
-      responses:
-        "200":
-          description: Successfully created employee
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EmployeeResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-fn-crud-operation:
-        op: POST
-        type: Employee
   /employees/{id}:
     get:
       tags:
@@ -316,6 +180,104 @@ paths:
       x-fn-crud-operation:
         op: PATCH
         type: Employee
+  /employees:
+    get:
+      tags:
+      - Employee
+      operationId: findEmployees
+      parameters:
+      - name: filter
+        in: query
+        schema:
+          $ref: "#/components/schemas/EmployeeFilter"
+      responses:
+        "200":
+          description: Successfully retrieved employees
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeArrayResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server side error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags:
+      - Employee
+      operationId: createEmployees
+      requestBody:
+        description: Employee request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+        required: true
+      responses:
+        "200":
+          description: Successfully created employee
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmployeeResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server side error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-fn-crud-operation:
+        op: POST
+        type: Employee
   /employees/{employeeId}/hierarchy:
     get:
       tags:
@@ -436,90 +398,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EmployeeResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /employees/search:
-    get:
-      tags:
-      - Employee
-      operationId: searchEmployees
-      responses:
-        "200":
-          description: Successfully retrieved employees
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EmployeeArrayResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Forbidden request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Server side error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /employees/search/suggest:
-    get:
-      tags:
-      - Employee
-      operationId: suggestEmployees
-      responses:
-        "200":
-          description: Successfully retrieved employees
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EmployeeArrayResponse"
         "400":
           description: Bad request
           content:
@@ -1241,6 +1119,8 @@ components:
             format: uuid
           x-fn-jpa-property:
             custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
+        role:
+          $ref: "#/components/schemas/EmployeeRole"
         active:
           type: boolean
       x-fn-base-dto-type: NO_OP
@@ -1289,14 +1169,6 @@ components:
       - user
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          x-fn-id: true
-          x-fn-jpa-property:
-            id-generator:
-              strategy: UUID
-            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
         organization:
           allOf:
           - $ref: "#/components/schemas/Organization"
@@ -1341,6 +1213,7 @@ components:
           x-fn-scope:
           - DTO
           - JPA
+          - ES
           x-fn-fragment-projection:
           - SUMMARY
           - FULL
@@ -1441,6 +1314,14 @@ components:
     Searchable:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          x-fn-id: true
+          x-fn-jpa-property:
+            custom-annotations: '@JdbcTypeCode(SqlTypes.VARCHAR)'
+            id-generator:
+              strategy: UUID
         globalSearch:
           type: string
           x-fn-scope:

@@ -5,6 +5,7 @@ import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslCrudE
 import co.altir.dbmanagement.dataaccess.openapidsl.endpoint.annotations.DslEndpoint;
 import co.altir.ems.model.common.EmployeeHierarchyNode;
 import co.altir.ems.model.organization.Employee;
+import co.altir.ems.model.organization.EmployeeFilter;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,13 +14,7 @@ public interface EmployeeController {
 
   @DslCrudEndpoints(
       path = "/employees",
-      methods = {
-        HttpMethod.GET,
-        HttpMethod.GET_BY_ID,
-        HttpMethod.POST,
-        HttpMethod.PATCH,
-        HttpMethod.DELETE
-      })
+      methods = {HttpMethod.GET_BY_ID, HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE})
   Employee crudEndpointsForEmployee();
 
   /** Assign or change role of an employee */
@@ -38,9 +33,6 @@ public interface EmployeeController {
   @DslEndpoint(path = "/employees/{employeeId}/supervisor", method = HttpMethod.GET)
   Employee getSupervisor(UUID employeeId);
 
-  @DslEndpoint(path = "/employees/search", method = HttpMethod.GET)
-  List<Employee> searchEmployees();
-
-  @DslEndpoint(path = "/employees/search/suggest", method = HttpMethod.GET)
-  List<Employee> suggestEmployees();
+  @DslEndpoint(path = "/employees", method = HttpMethod.GET)
+  List<Employee> findEmployees(EmployeeFilter filter);
 }

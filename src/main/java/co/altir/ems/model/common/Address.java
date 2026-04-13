@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @DslJpaEmbeddable
 public class Address {
-
+// this is embedable object
   @DslRequired() private String line1;
   private String line2;
   @DslRequired() private String city;

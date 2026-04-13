@@ -14,5 +14,7 @@ public class EmployeeFilter {
 
   private List<UUID> organization;
 
+  private EmployeeRole role;
+
   private Boolean active;
 }
